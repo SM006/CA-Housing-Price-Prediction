@@ -89,10 +89,11 @@ function App() {
   const getPrediction = async () => {
     setLoading(true);
     try {
-      const resp = await axios.post('http://localhost:8000/predict', formData);
+      const resp = await axios.post('http://localhost:8000/api/v1/predict', formData);
       setPrediction(resp.data);
     } catch (err) {
       console.error(err);
+      alert("Analysis service unavailable. Check backend logs.");
     }
     setLoading(false);
   };

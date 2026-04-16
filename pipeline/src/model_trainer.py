@@ -6,7 +6,7 @@ from lightgbm import LGBMRegressor
 from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import joblib
-from src.config import RANDOM_STATE, LGBM_PARAMS
+from .config import RANDOM_STATE, LGBM_PARAMS
 
 class ModelTrainer:
     def __init__(self):

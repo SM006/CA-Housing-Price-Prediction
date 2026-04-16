@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
-from src.config import TARGET_COLUMN, TEST_SIZE, RANDOM_STATE
+from .config import TARGET_COLUMN, TEST_SIZE, RANDOM_STATE
 
 class FeatureEngineer(BaseEstimator, TransformerMixin):
     """
