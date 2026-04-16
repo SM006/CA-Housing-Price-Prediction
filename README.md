@@ -103,4 +103,4 @@ python3 -m pipeline.train
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-**Designed with ❤️ by Apple Data Systems Architect**
+AI IA - II
