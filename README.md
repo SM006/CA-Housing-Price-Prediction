@@ -99,8 +99,18 @@ python3 -m pipeline.train
 
 ---
 
+## 👥 Contributors
+**AI IA - II**
+- **Shreya Menon** (16010123324)
+- **Shreyans Tatiya** (16010123325)
+- **Shubhpreet Kaur** (16010123328)
+- **Shweta Karandikar** (16010123329)
+- **Siddhant Raut** (16010123331)
+
+---
+
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-AI IA - II
+
