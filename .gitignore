@@ -33,7 +33,7 @@ venv.bak/
 
 # Web / React
 node_modules/
-/web/frontend/dist/
+/frontend/dist/
 .eslintcache
 .stylelintcache
 *.log
@@ -50,10 +50,12 @@ yarn-error.log*
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-
-# Large Models (optional - sometimes excluded if using DVC)
-# models/*.joblib
 
 # IDEs
 .vscode/
@@ -62,4 +64,4 @@ Thumbs.db
 *.swo
 
 # Project specific
-/reports/plots/*.png
+/artifacts/model_binaries/*.joblib

@@ -1,13 +1,20 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from .api.endpoints import router as api_router
 from .core.config import settings
+import os
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.PROJECT_VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
+
+# Mount Static Files for Evaluation Plots
+plots_path = os.path.join(settings.PROJECT_ROOT, "artifacts", "evaluation_plots")
+if os.path.exists(plots_path):
+    app.mount("/plots", StaticFiles(directory=plots_path), name="plots")
 
 # Set all CORS enabled origins
 app.add_middleware(
