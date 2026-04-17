@@ -64,4 +64,4 @@ Thumbs.db
 *.swo
 
 # Project specific
-/artifacts/model_binaries/*.joblib
+artifacts/
