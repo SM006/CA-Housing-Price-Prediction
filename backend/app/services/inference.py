@@ -34,6 +34,9 @@ class InferenceService:
         if self.model is None or self.pipeline is None:
             raise ValueError("Model artifacts are not loaded.")
         
+        # Calculate Confidence Score before transform
+        confidence = self._calculate_confidence(features_dict)
+        
         # Convert to DataFrame
         df = pd.DataFrame([features_dict])
         
@@ -46,8 +49,42 @@ class InferenceService:
         return {
             "prediction_raw": float(prediction),
             "predicted_price": float(prediction * 100000),
+            "confidence_score": float(confidence),
             "currency": "USD"
         }
+
+    def _calculate_confidence(self, features: dict) -> float:
+        """
+        Calculates a dynamic confidence score (0-100) based on 
+        feature proximity to the training distribution (Z-scores).
+        """
+        # Feature Distribution Stats (Approximate for CA Housing Dataset)
+        stats = {
+            "MedInc": {"mean": 3.87, "std": 1.89},
+            "HouseAge": {"mean": 28.6, "std": 12.5},
+            "AveRooms": {"mean": 5.42, "std": 2.47},
+            "AveOccup": {"mean": 3.07, "std": 10.3},
+        }
+        
+        z_scores = []
+        for feat, val in features.items():
+            if feat in stats:
+                z = abs(val - stats[feat]["mean"]) / stats[feat]["std"]
+                z_scores.append(z)
+        
+        # Average distance from mean (lower is better)
+        avg_z = sum(z_scores) / len(z_scores) if z_scores else 0
+        
+        # Logic: 
+        # Baseline = 0.94 (Initial system confidence for high R2 model)
+        # Decay: confidence drops as we move away from typical training data
+        import math
+        decay_factor = math.exp(-avg_z / 4.0) # Soft decay
+        
+        final_score = 94.2 * decay_factor
+        
+        # Clamp between 20 and 98
+        return max(20.0, min(98.0, final_score))
 
 # Singleton instance
 inference_service = InferenceService()

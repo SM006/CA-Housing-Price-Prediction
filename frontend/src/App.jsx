@@ -258,7 +258,7 @@ function App() {
                                 ${prediction.predicted_price.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                               </div>
                               <div className="flex gap-12">
-                                <div className="flex items-center gap-3 text-xs font-bold text-slate-400 uppercase tracking-widest"><ShieldCheck size={16} className="text-emerald-500" /> Confidence Alpha 94.2%</div>
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-400 uppercase tracking-widest"><ShieldCheck size={16} className="text-emerald-500" /> Confidence Alpha {prediction.confidence_score.toFixed(1)}%</div>
                                 <div className="flex items-center gap-3 text-xs font-bold text-slate-400 uppercase tracking-widest"><Zap size={16} className="text-sky-500" /> Inferred v2.5.4</div>
                               </div>
                            </div>
