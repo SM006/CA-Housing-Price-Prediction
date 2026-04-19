@@ -89,16 +89,7 @@ const Modal = ({ isOpen, onClose, children }) => (
   </AnimatePresence>
 );
 
-// --- Data ---
-const featureImportanceData = [
-  { name: 'Med. Income', value: 0.85, color: '#6366f1' },
-  { name: 'Occupancy', value: 0.45, color: '#8b5cf6' },
-  { name: 'House Age', value: 0.35, color: '#d946ef' },
-  { name: 'Latitude', value: 0.30, color: '#ec4899' },
-  { name: 'Longitude', value: 0.28, color: '#f43f5e' },
-  { name: 'Avg. Rooms', value: 0.15, color: '#f59e0b' },
-];
-
+// --- Data (Fallbacks) ---
 const demographicDistricts = [
   { name: 'San Francisco', pop: '873K', income: '$126K', growth: '+2.4%', color: 'text-sky-400' },
   { name: 'Los Angeles', pop: '3.8M', income: '$76K', growth: '+1.1%', color: 'text-purple-400' },
@@ -121,8 +112,21 @@ function App() {
     Longitude: -119.5
   });
 
+  const [featureImportance, setFeatureImportance] = useState([]);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchExplanations = async () => {
+      try {
+        const resp = await axios.get('http://localhost:8000/api/v1/explain');
+        setFeatureImportance(resp.data);
+      } catch (err) {
+        console.error("Failed to fetch model explanations", err);
+      }
+    };
+    fetchExplanations();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -340,17 +344,17 @@ function App() {
                   <div className="flex-1 grid grid-cols-12 gap-14 min-h-[800px]">
                      <div className="col-span-7 glass-panel p-12 border-white/5 bg-black/20">
                         <ResponsiveContainer width="100%" height="100%">
-                         <BarChart data={featureImportanceData} layout="vertical">
+                         <BarChart data={featureImportance} layout="vertical">
                            <XAxis type="number" hide />
                            <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 13, fontWeight: 900}} width={140} />
                            <Bar dataKey="value" radius={[4, 4, 4, 4]} barSize={42}>
-                              {featureImportanceData.map((entry, index) => <Cell key={index} fill={entry.color} />)}
+                              {featureImportance.map((entry, index) => <Cell key={index} fill={entry.color} />)}
                            </Bar>
                          </BarChart>
                        </ResponsiveContainer>
                      </div>
                      <div className="col-span-5 flex flex-col gap-8">
-                        {featureImportanceData.map((f, i) => (
+                        {featureImportance.slice(0, 6).map((f, i) => (
                            <div key={i} className="glass-panel p-8 group border-white/5 bg-black/10">
                               <div className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-4">{f.name} Vector</div>
                               <div className="flex items-end justify-between">

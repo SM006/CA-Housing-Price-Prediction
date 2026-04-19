@@ -6,3 +6,4 @@ scikit-learn
 lightgbm
 joblib
 streamlit
+shap

@@ -1,5 +1,6 @@
 import joblib
 import pandas as pd
+import numpy as np
 import os
 import logging
 import sys
@@ -52,6 +53,50 @@ class InferenceService:
             "confidence_score": float(confidence),
             "currency": "USD"
         }
+
+    def get_explanations(self):
+        """
+        Retrieves actual feature importance weights from the trained model.
+        """
+        if self.model is None or self.pipeline is None:
+            raise ValueError("Model artifacts are not loaded.")
+
+        # Get feature names from the pipeline steps
+        try:
+            # We use a dummy transform to get the feature names from the pipeline output
+            dummy_df = pd.DataFrame([{
+                "MedInc": 3.5, "HouseAge": 28, "AveRooms": 5, 
+                "AveBedrms": 1, "Population": 1400, "AveOccup": 3, 
+                "Latitude": 35.6, "Longitude": -119.5
+            }])
+            processed_dummy = self.pipeline.transform(dummy_df)
+            feature_names = list(processed_dummy.columns)
+            
+            # Get importance from the model
+            importances = self.model.feature_importances_
+            
+            # Normalize to 0-1 scale (matching frontend expectations)
+            max_imp = float(np.max(importances))
+            normalized = [float(val / max_imp) for val in importances]
+            
+            # Map names to scores
+            explanation = []
+            colors = ['#6366f1', '#8b5cf6', '#d946ef', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4']
+            
+            for i, name in enumerate(feature_names):
+                explanation.append({
+                    "name": name,
+                    "value": normalized[i],
+                    "color": colors[i % len(colors)]
+                })
+            
+            # Sort by importance
+            explanation.sort(key=lambda x: x['value'], reverse=True)
+            return explanation
+            
+        except Exception as e:
+            logger.error(f"Error generating explanations: {e}")
+            return []
 
     def _calculate_confidence(self, features: dict) -> float:
         """

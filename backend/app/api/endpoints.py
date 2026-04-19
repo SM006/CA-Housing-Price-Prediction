@@ -35,3 +35,13 @@ def get_prediction(features: HousingFeatures):
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal inference error.")
+
+@router.get("/explain")
+def get_model_explanation():
+    try:
+        explanation = inference_service.get_explanations()
+        return explanation
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error generating model explanation.")
