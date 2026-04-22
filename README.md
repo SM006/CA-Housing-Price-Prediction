@@ -1,4 +1,4 @@
-# CA Housing Intelligence v3.1.0
+# CA Housing Intelligence 
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3120/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100.0+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
